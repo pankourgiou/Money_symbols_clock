@@ -15,7 +15,7 @@ class AlienClock:
         self.canvas = tk.Canvas(root, width=self.canvas_size, height=self.canvas_size, bg='black')
         self.canvas.pack()
         
-        self.symbols = ["Β£", "Π”ΠΈΠ½.", "kr", "Β¥", " β‚Ή", "$", "β‚", "β‚¬", "Β¥", "β‚½", "R$", "Π»Π²"]
+        self.symbols = ["₹", "¥", "kr", "Β¥", " £", "$", "Euro", "₽", "Β¥", "лв", "R$", "Kč"]
         
         self.draw_clock_face()
         self.update_time()
