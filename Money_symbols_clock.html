@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Alien Currency Clock</title>
+
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at center, #020617, #000);
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    color: white;
+  }
+
+  .wrapper {
+    text-align: center;
+  }
+
+  h1 {
+    letter-spacing: 3px;
+    font-weight: 500;
+    margin-bottom: 15px;
+    color: #7df9ff;
+    text-shadow: 0 0 15px #00eaff;
+  }
+
+  canvas {
+    border-radius: 50%;
+    background: linear-gradient(145deg, #020617, #000);
+    box-shadow:
+      0 0 50px rgba(0, 234, 255, 0.3),
+      inset 0 0 30px rgba(0, 234, 255, 0.15);
+  }
+</style>
+</head>
+
+<body>
+<div class="wrapper">
+  <h1>ALIEN CURRENCY CLOCK</h1>
+  <canvas id="clock" width="420" height="420"></canvas>
+</div>
+
+<script>
+const canvas = document.getElementById("clock");
+const ctx = canvas.getContext("2d");
+
+const size = canvas.width;
+const center = size / 2;
+const radius = 140;
+
+// Currency / alien symbols
+const symbols = ["₹", "¥", "kr", "Euro", "£", "$", "Euro", "₽", "Euro", "лв", "R$", "Kč"];
+
+function drawFace() {
+  ctx.clearRect(0, 0, size, size);
+
+  // outer circle
+  ctx.beginPath();
+  ctx.arc(center, center, 170, 0, Math.PI * 2);
+  ctx.strokeStyle = "#7df9ff";
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  // glow
+  ctx.shadowColor = "#00eaff";
+  ctx.shadowBlur = 10;
+
+  // symbols
+  ctx.font = "bold 18px Segoe UI";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillStyle = "cyan";
+
+  for (let i = 0; i < 12; i++) {
+    const angle = (i * Math.PI / 6) - Math.PI / 2;
+    const x = center + radius * Math.cos(angle);
+    const y = center + radius * Math.sin(angle);
+    ctx.fillText(symbols[i], x, y);
+  }
+
+  ctx.shadowBlur = 0;
+}
+
+function drawHand(angle, length, width, color) {
+  ctx.beginPath();
+  ctx.moveTo(center, center);
+  ctx.lineTo(
+    center + length * Math.cos(angle),
+    center + length * Math.sin(angle)
+  );
+  ctx.strokeStyle = color;
+  ctx.lineWidth = width;
+  ctx.lineCap = "round";
+  ctx.stroke();
+}
+
+function drawClock() {
+  drawFace();
+
+  const now = new Date();
+
+  const hour = now.getHours() % 12;
+  const minute = now.getMinutes();
+  const second = now.getSeconds();
+
+  const hourAngle = ((hour + minute / 60) * Math.PI / 6) - Math.PI / 2;
+  const minuteAngle = ((minute + second / 60) * Math.PI / 30) - Math.PI / 2;
+  const secondAngle = (second * Math.PI / 30) - Math.PI / 2;
+
+  drawHand(hourAngle, 70, 6, "#ff3b3b");
+  drawHand(minuteAngle, 100, 3, "#00aaff");
+  drawHand(secondAngle, 120, 1.5, "lime");
+
+  // center
+  ctx.beginPath();
+  ctx.arc(center, center, 5, 0, Math.PI * 2);
+  ctx.fillStyle = "white";
+  ctx.fill();
+
+  requestAnimationFrame(drawClock);
+}
+
+
+drawClock();
+</script>
+</body>
+</html>
